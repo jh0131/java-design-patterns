@@ -1,6 +1,7 @@
 public class StudentCrew implements Crew {
 
-    private String name;
+    // setter 따로 없어서 final 선언
+    private final String name;
 
     public StudentCrew(String name) {
         this.name = name;

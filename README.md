@@ -16,7 +16,10 @@ strategy/
 
 observer/
 ├─ observer-example/          # Coach와 Crew를 이용한 기본 실습
-└─ hw3-observer/              # Observer 과제 골격 및 진행 코드
+└─ hw3-observer/              # 2단 Observer 체인과 구독 관리 과제
+
+decorator/
+└─ hw4-decorator/             # Swing 메뉴 주문과 옵션 데코레이터 과제
 ```
 
 ## 패턴 핵심
@@ -31,7 +34,11 @@ observer/
 
 ### Observer
 
-Subject가 Observer를 등록하고 관리하다가 사건이 발생하면 등록된 Observer의 `update()`를 호출합니다. Subject와 Observer는 구체 클래스 대신 인터페이스를 통해 연결됩니다.
+Subject가 Observer를 등록하고 관리하다가 사건이 발생하면 Observer의 알림 메서드를 호출합니다. 기본 실습은 `update()`, 메뉴 이벤트 과제는 `onEvent()`를 사용합니다. Subject와 Observer는 구체 클래스 대신 인터페이스를 통해 연결됩니다.
+
+### Decorator
+
+공통 인터페이스를 구현하는 객체로 기존 객체를 감싸 기능을 추가합니다. 메뉴 주문에서는 가격과 설명을 확장하며, 옵션을 감싸는 순서에 따라 할인 결과가 달라집니다.
 
 ## 저장소 관리 기준
 

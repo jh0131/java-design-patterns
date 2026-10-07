@@ -1,42 +1,69 @@
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
 // 허브의 Observer이자 사용자 뷰에 대한 Subject
 public class SubscriptionManager implements IMenuEventObserver, ISubscriptionSubject {
-    // TODO: 식당 ID -> 사용자 ID -> 사용자 뷰 저장소 초기화
-    private Map<String, Map<String, IMenuEventObserver>> viewsByRestaurant;
+    // 식당 ID -> 사용자 ID -> 사용자 뷰
+    private Map<String, Map<String, IMenuEventObserver>> viewsByRestaurant = new LinkedHashMap<>();
 
     @Override
     public void subscribe(String restaurantId, String userId, IMenuEventObserver userView) {
-        // TODO: 구독 등록
-        throw new UnsupportedOperationException("TODO: subscribe");
+        if (restaurantId == null || userId == null || userView == null) return;
+
+        Map<String, IMenuEventObserver> views = viewsByRestaurant.get(restaurantId);
+        if (views == null) {
+            views = new LinkedHashMap<>();
+            viewsByRestaurant.put(restaurantId, views);
+        }
+        views.put(userId, userView); // 같은 사용자 ID로 다시 구독하면 뷰를 교체한다.
     }
 
     @Override
     public boolean unsubscribe(String restaurantId, String userId) {
-        // TODO: 구독 해제
-        throw new UnsupportedOperationException("TODO: unsubscribe");
+        Map<String, IMenuEventObserver> views = viewsByRestaurant.get(restaurantId);
+        if (views == null || userId == null) return false;
+
+        boolean removed = views.remove(userId) != null;
+        if (views.isEmpty()) viewsByRestaurant.remove(restaurantId);
+        return removed;
     }
 
     @Override
     public void notifySubscribers(MenuEvent event) {
-        // TODO: 해당 식당의 구독자 통지
-        throw new UnsupportedOperationException("TODO: notifySubscribers");
+        Map<String, IMenuEventObserver> views = viewsByRestaurant.get(event.restaurantId());
+        if (views == null) return;
+
+        // 통지 중 구독자가 추가·삭제되어도 이번 순회가 깨지지 않도록 복사한다.
+        for (IMenuEventObserver view : new ArrayList<>(views.values())) {
+            try {
+                view.onEvent(event);
+            } catch (RuntimeException e) {
+                System.out.printf("[WARN] 구독라우터[%s] → %s 통지 실패: %s%n",
+                        event.restaurantId(), view.getClass().getSimpleName(), e.getMessage());
+            }
+        }
     }
 
     @Override
     public void onEvent(MenuEvent event) {
-        // TODO: 허브에서 받은 이벤트 처리
-        throw new UnsupportedOperationException("TODO: onEvent");
+        notifySubscribers(event);
     }
 
     public int subscriberCount(String restaurantId) {
-        // TODO: 식당의 구독자 수 조회
-        throw new UnsupportedOperationException("TODO: subscriberCount");
+        Map<String, IMenuEventObserver> views = viewsByRestaurant.get(restaurantId);
+        return views == null ? 0 : views.size();
     }
 
     public Set<String> subscriptionsOf(String userId) {
-        // TODO: 사용자가 구독한 식당 ID 조회
-        throw new UnsupportedOperationException("TODO: subscriptionsOf");
+        Set<String> restaurantIds = new LinkedHashSet<>();
+        if (userId == null) return restaurantIds;
+
+        for (Map.Entry<String, Map<String, IMenuEventObserver>> entry : viewsByRestaurant.entrySet()) {
+            if (entry.getValue().containsKey(userId)) restaurantIds.add(entry.getKey());
+        }
+        return restaurantIds;
     }
 }

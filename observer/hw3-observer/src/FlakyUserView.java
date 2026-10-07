@@ -3,13 +3,11 @@ public class FlakyUserView implements IMenuEventObserver {
     private final String userId;
 
     public FlakyUserView(String userId) {
-        // TODO: 사용자 정보 초기화
-        throw new UnsupportedOperationException("TODO: constructor");
+        this.userId = userId;
     }
 
     @Override
     public void onEvent(MenuEvent event) {
-        // TODO: 과제에서 지정한 실패 상황 구현
-        throw new UnsupportedOperationException("TODO: onEvent");
+        throw new IllegalStateException(userId + " 단말 연결 끊김");
     }
 }
