@@ -23,6 +23,7 @@ build/
 # Local exercise input data
 *.csv
 *.jsonl
+custom-sets.xml
 
 # Operating system files
 .DS_Store

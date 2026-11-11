@@ -23,6 +23,9 @@ decorator/
 
 builder-factory/
 └─ hw5-builder-factory/       # 코너별 메뉴 Factory와 주간 식단 Builder 과제
+
+command/
+└─ hw6-command/               # Undo·Redo와 사용자 세트를 지원하는 장바구니 과제
 ```
 
 ## 패턴 핵심
@@ -51,6 +54,10 @@ Subject가 Observer를 등록하고 관리하다가 사건이 발생하면 Obser
 
 여러 구성 요소를 단계적으로 지정하고 `build()`에서 규칙을 검사해 객체를 완성합니다. [HW5](builder-factory/hw5-builder-factory)는 한 끼 세트와 월~금 주간 식단을 조립하며, 사용자 추가 기능으로 주간 예산 제한을 지원합니다.
 
+### Command
+
+요청을 객체로 만들어 실행과 실행 취소를 공통 인터페이스로 다룹니다. [HW6](command/hw6-command)는 장바구니 조작의 Undo·Redo, 여러 요청을 묶은 매크로, 사용자 세트 편집과 XML 저장을 지원합니다.
+
 각 프로젝트는 독립적으로 컴파일하고 실행합니다. 새 과제의 실행 방법과 입력 파일 형식은 해당 폴더의 README에 정리했습니다.
 
 ## 저장소 관리 기준
@@ -58,4 +65,5 @@ Subject가 Observer를 등록하고 관리하다가 사건이 발생하면 Obser
 - Java 소스와 Markdown 문서만 관리합니다.
 - 컴파일 결과물, IDE 설정, 환경 변수 파일은 `.gitignore`에서 제외합니다.
 - CSV 및 JSONL 입력 데이터는 로컬 실습 자료이므로 저장소에 포함하지 않습니다.
+- Command 과제의 사용자 저장 파일 `custom-sets.xml`도 제외합니다.
 - 각 과제의 세부 구조와 진행 상태는 하위 폴더의 README에서 확인할 수 있습니다.
